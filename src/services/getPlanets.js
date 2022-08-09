@@ -1,26 +1,19 @@
 import getResource from '../utils/getResource';
-import axios from 'axios';
 
 const getPlanets = async () => {
   try {
     let planets = await getResource('planets');
+    let people = await getResource('people');
 
-    planets = await Promise.all(
-      planets.map(async planet => {
-        const residents = [];
-        for (let resident of planet.residents) {
-          try {
-            const res = await axios.get(resident);
-            residents.push(res.data.name);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        planet.residents = residents;
-        return planet;
-      })
-    );
-    console.log(planets);
+    planets = planets.map(planet => {
+      const residents = [];
+      for (let resident of planet.residents) {
+        const character = people.find(people => people.url === resident);
+        residents.push(character.name);
+      }
+      planet.residents = residents;
+      return planet;
+    });
     return planets;
   } catch (e) {
     console.log(e);
