@@ -1,26 +1,8 @@
-import axios from 'axios';
+import getResource from '../utils/getResource';
 
-const getData = async orderBy => {
+const getPeople = async orderBy => {
   try {
-    const baseUrl = 'https://swapi.dev/api/';
-    const limit = 10;
-    const res = await axios.get(`${baseUrl}people`);
-    const countPeople = res.data.count;
-    const pages = countPeople / limit;
-    const finalPages = Number.isInteger(pages) ? pages : pages + 1;
-    const promiseArray = [];
-
-    for (let i = 1; i <= finalPages; i++) {
-      promiseArray.push(axios.get(`${baseUrl}people/?page=${i}`));
-    }
-
-    let people = [];
-
-    await Promise.all(promiseArray).then(values => {
-      values.forEach(promiseResponse => {
-        people.push(...promiseResponse.data.results);
-      });
-    });
+    let people = await getResource('people');
 
     if (orderBy) {
       if (orderBy === 'name') {
@@ -63,4 +45,4 @@ const getData = async orderBy => {
   }
 };
 
-export default getData;
+export default getPeople;
