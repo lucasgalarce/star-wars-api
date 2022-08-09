@@ -19,7 +19,6 @@ const getResource = async resource => {
       array.push(...promiseResponse.data.results);
     });
   });
-  console.log(array);
   return array;
 };
 

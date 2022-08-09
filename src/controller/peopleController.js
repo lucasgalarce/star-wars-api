@@ -4,9 +4,9 @@ const peopleController = {
   async people(req, res, next) {
     try {
       const { orderBy } = req.query;
-      const array = await getPeople(orderBy);
+      const people = await getPeople(orderBy);
       return res.status(200).json({
-        array,
+        people,
       });
     } catch (e) {
       next(e);
