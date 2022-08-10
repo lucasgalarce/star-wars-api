@@ -17,7 +17,6 @@ const getPeople = async orderBy => {
         });
       } else {
         people.sort((a, b) => {
-          if (a[orderBy] === 'unknown' && b[orderBy] === 'unknown') return -1;
           if (b[orderBy] === 'unknown') return -1;
           const cleanNumberA = parseFloat(a[orderBy].replace(/,/g, ''));
           const cleanNumberB = parseFloat(b[orderBy].replace(/,/g, ''));
