@@ -2,7 +2,7 @@ import getResource from '../utils/getResource';
 
 const getPeople = async orderBy => {
   try {
-    let people = await getResource('people');
+    const people = await getResource('people');
 
     if (orderBy) {
       if (orderBy === 'name') {
@@ -16,17 +16,11 @@ const getPeople = async orderBy => {
           return 0;
         });
       } else {
-        const filteredPeople = people.filter(
-          value => value[orderBy] !== 'unknown'
-        );
-        const unknownDataPeople = people.filter(
-          value => value[orderBy] === 'unknown'
-        );
-
-        filteredPeople.sort((a, b) => {
+        people.sort((a, b) => {
+          if (a[orderBy] === 'unknown' && b[orderBy] === 'unknown') return -1;
+          if (b[orderBy] === 'unknown') return -1;
           const cleanNumberA = parseFloat(a[orderBy].replace(/,/g, ''));
           const cleanNumberB = parseFloat(b[orderBy].replace(/,/g, ''));
-
           if (cleanNumberA < cleanNumberB) {
             return -1;
           } else if (cleanNumberA > cleanNumberB) {
@@ -34,8 +28,6 @@ const getPeople = async orderBy => {
           }
           return 0;
         });
-
-        people = [...filteredPeople, ...unknownDataPeople];
       }
     }
 
